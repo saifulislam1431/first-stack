@@ -9,7 +9,7 @@ import {
 import Layout from './component/Layout/Layout';
 import Home from './component/Home/Home';
 import Register from './component/Register/Register';
-import Login from './component/Login/login';
+import LoginForm from './component/LoginForm/LoginForm';
 
 const router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path:"/login",
-        element: <Login></Login>
+        element: <LoginForm></LoginForm>
       }
     ]
   },
