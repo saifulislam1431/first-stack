@@ -1,77 +1,100 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import google from '../../assets/google.png';
 import facebook from '../../assets/facebook.png';
 import github from '../../assets/github.png';
 import twitter from '../../assets/twitter.png';
 import { Link } from 'react-router-dom';
-import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
-    const {user, signUser}  = useContext(AuthContext);
+    const { user, signUser, forgetPassword } = useContext(AuthContext);
 
-    const [isShow , setIsShow] = useState(false);
+    const [isShow, setIsShow] = useState(false);
 
-    const [type , setIsType] = useState('password')
+    const [type, setIsType] = useState('password')
 
-    const [getError , setGetError] = useState('');
+    const [getError, setGetError] = useState('');
 
-    const handleTypeText =()=>{
+    const emailRef = useRef();
+
+    const handleTypeText = () => {
         setIsType('text');
 
     }
-    const handleTypePass =()=>{
+    const handleTypePass = () => {
         setIsType('password');
 
     }
 
-    const handleLogIn = (e) =>{
+    const handleLogIn = (e) => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
 
-        signUser(email , password)
-        .then(res=>{
-            const loggedUser = res.user;
-            console.log(loggedUser);
-            toast.success('Welcome Back!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
+        signUser(email, password)
+            .then(res => {
+                const loggedUser = res.user;
+                console.log(loggedUser);
+                toast.success('Welcome Back!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
                 });
 
-            form.reset();
-            setGetError('')
-        })
-        .catch(error=>{
-            setGetError(error.message);
+                form.reset();
+                setGetError('')
+            })
+            .catch(error => {
+                setGetError(error.message);
 
-        })
+            })
 
 
-       
 
-    }
-    const handleGoogleLogIn = () =>{
 
     }
-    const handleGithubLogIn = () =>{
-        
+    const handleGoogleLogIn = () => {
+
     }
-    const handleTwitterLogIn = () =>{
-        
+    const handleGithubLogIn = () => {
+
     }
-    const handleFacebookLogIn = () =>{
-        
+    const handleTwitterLogIn = () => {
+
+    }
+    const handleFacebookLogIn = () => {
+
+    }
+    const passResetEmail = () => {
+        const email = emailRef.current.value;
+        forgetPassword(email)
+            .then(() => {
+                toast.success('Password reset email sent!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+
+            })
+            .catch(error=>{
+                setGetError(error.message);
+            })
+
     }
     return (
         <main>
@@ -88,28 +111,28 @@ const LoginForm = () => {
                                     <label className="label">
                                         <span className="label-text">Email</span>
                                     </label>
-                                    <input type="email" 
-                                    name='email'
-                                    placeholder="email" className="input input-bordered" required/>
+                                    <input type="email"
+                                        name='email' ref={emailRef}
+                                        placeholder="email" className="input input-bordered" required />
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Password</span>
                                     </label>
                                     <div className='flex items-center'>
-                                    <input type={type}
-                                    name='password'
-                                    placeholder="password" className="input input-bordered" required/>
-                                    <span onClick={()=> setIsShow(!isShow)} className='relative right-8'>
-                                        {
-                                            isShow ? <EyeSlashIcon className='h-6 w-6 text-sky-600' onClick={handleTypePass}/> : <EyeIcon className='h-6 w-6 text-sky-600' onClick={handleTypeText}/>
-                                        }
+                                        <input type={type}
+                                            name='password'
+                                            placeholder="password" className="input input-bordered" required />
+                                        <span onClick={() => setIsShow(!isShow)} className='relative right-8'>
+                                            {
+                                                isShow ? <EyeSlashIcon className='h-6 w-6 text-sky-600' onClick={handleTypePass} /> : <EyeIcon className='h-6 w-6 text-sky-600' onClick={handleTypeText} />
+                                            }
 
-                                    </span>
+                                        </span>
                                     </div>
-                                    
+
                                     <label className="label">
-                                        <span className="label-text-alt link link-hover mt-2 font-semibold text-red-400">Forgot password?</span>
+                                        <span onClick={passResetEmail} className="label-text-alt link link-hover mt-2 font-semibold text-red-400">Forgot password?</span>
                                     </label>
                                 </div>
                                 <div className="form-control mt-4">

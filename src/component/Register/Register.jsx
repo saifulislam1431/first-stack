@@ -4,6 +4,7 @@ import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { sendEmailVerification } from 'firebase/auth';
 
 const Register = () => {
     const {user , newUser}  = useContext(AuthContext);
@@ -29,9 +30,11 @@ const Register = () => {
         const password = form.password.value;
         console.log(name , email , password);
 
+
         newUser(email , password)
         .then(res=>{
             const loggedUser = res.user;
+            verifyEmail(res.user)
             console.log(loggedUser);
             toast.success('Account created successfully!', {
                 position: "top-center",
@@ -43,6 +46,7 @@ const Register = () => {
                 progress: undefined,
                 theme: "light",
                 });
+                
 
             form.reset();
             setGetError('')
@@ -51,6 +55,23 @@ const Register = () => {
             setGetError(error.message);
 
         })
+
+        const verifyEmail = (user) =>{
+            sendEmailVerification(user)
+            .then(()=>{
+                toast.success('Email verification sent!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                    });
+            })
+
+        }
     }
     return (
         <main>
