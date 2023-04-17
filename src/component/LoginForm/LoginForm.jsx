@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
-    const { user, signUser, forgetPassword, googleSignIn } = useContext(AuthContext);
+    const { user, signUser, forgetPassword, googleSignIn, githubSignIn } = useContext(AuthContext);
 
     const [isShow, setIsShow] = useState(false);
 
@@ -89,6 +89,28 @@ const LoginForm = () => {
 
     }
     const handleGithubLogIn = () => {
+        githubSignIn()
+        .then(res => {
+            const loggedUser = res.user;
+            console.log(loggedUser);
+            toast.success('Welcome Back!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+
+            form.reset();
+            setGetError('')
+        })
+        .catch(error => {
+            setGetError(error.message);
+
+        })
 
     }
     const handleTwitterLogIn = () => {
