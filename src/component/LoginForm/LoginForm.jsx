@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import google from '../../assets/google.png';
 import facebook from '../../assets/facebook.png';
 import github from '../../assets/github.png';
 import twitter from '../../assets/twitter.png';
 import { Link } from 'react-router-dom';
+import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
 
 const LoginForm = () => {
+    const [isShow , setIsShow] = useState(false);
+
+    const [type , setIsType] = useState('password')
+
+    const handleTypeText =()=>{
+        setIsType('text');
+
+    }
+    const handleTypePass =()=>{
+        setIsType('password');
+
+    }
+
     const handleLogIn = (e) =>{
         e.preventDefault();
         const form = e.target;
@@ -50,9 +64,18 @@ const LoginForm = () => {
                                     <label className="label">
                                         <span className="label-text">Password</span>
                                     </label>
-                                    <input type="password"
+                                    <div className='flex items-center'>
+                                    <input type={type}
                                     name='password'
                                     placeholder="password" className="input input-bordered" required/>
+                                    <span onClick={()=> setIsShow(!isShow)} className='relative right-8'>
+                                        {
+                                            isShow ? <EyeSlashIcon className='h-6 w-6 text-sky-600' onClick={handleTypePass}/> : <EyeIcon className='h-6 w-6 text-sky-600' onClick={handleTypeText}/>
+                                        }
+
+                                    </span>
+                                    </div>
+                                    
                                     <label className="label">
                                         <span className="label-text-alt link link-hover mt-2 font-semibold text-red-400">Forgot password?</span>
                                     </label>

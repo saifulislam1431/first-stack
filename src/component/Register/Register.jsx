@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
 
 const Register = () => {
+    const [isShow , setIsShow] = useState(false);
+
+    const [type , setIsType] = useState('password')
+
+    const handleTypeText =()=>{
+        setIsType('text');
+
+    }
+    const handleTypePass =()=>{
+        setIsType('password');
+
+    }
     const handleRegister = (e) => {
         e.preventDefault();
         const form = e.target;
@@ -42,10 +55,17 @@ const Register = () => {
                                     <label className="label">
                                         <span className="label-text">Password</span>
                                     </label>
-                                    <input type="password"
-                                        name='password'
-                                        placeholder="password" className="input input-bordered" required/>
+                                    <div className='flex items-center'>
+                                    <input type={type}
+                                    name='password'
+                                    placeholder="password" className="input input-bordered" required/>
+                                    <span onClick={()=> setIsShow(!isShow)} className='relative right-8'>
+                                        {
+                                            isShow ? <EyeSlashIcon className='h-6 w-6 text-sky-600' onClick={handleTypePass}/> : <EyeIcon className='h-6 w-6 text-sky-600' onClick={handleTypeText}/>
+                                        }
 
+                                    </span>
+                                    </div>
                                 </div>
                                 <div className="form-control my-5">
                                     <button className="btn btn-info text-white ">Register</button>
