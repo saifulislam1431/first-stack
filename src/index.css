@@ -5,3 +5,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.myContainer{
+ @apply px-10 lg:px-16 py-4
+}
+
+
+.active{
+  @apply font-bold text-sky-600
+}
+
+.default{
+  @apply font-medium text-gray-600
+}
