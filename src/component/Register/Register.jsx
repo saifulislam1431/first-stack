@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { toast } from 'react-toastify';
@@ -12,6 +12,8 @@ const Register = () => {
     const [getError, setGetError] = useState('')
 
     const [type, setIsType] = useState('password')
+
+    const navigate = useNavigate();
 
     const handleTypeText = () => {
         setIsType('text');
@@ -50,6 +52,7 @@ const Register = () => {
                 updateName(res.user , name);
                 form.reset();
                 setGetError('')
+                navigate('/')
             })
             .catch(error => {
                 setGetError(error.message);

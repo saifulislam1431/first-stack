@@ -3,7 +3,7 @@ import google from '../../assets/google.png';
 import facebook from '../../assets/facebook.png';
 import github from '../../assets/github.png';
 import twitter from '../../assets/twitter.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { toast } from 'react-toastify';
@@ -17,7 +17,7 @@ const LoginForm = () => {
     const [type, setIsType] = useState('password')
 
     const [getError, setGetError] = useState('');
-
+    const navigate = useNavigate();
     const emailRef = useRef();
 
     const handleTypeText = () => {
@@ -53,6 +53,7 @@ const LoginForm = () => {
 
                 form.reset();
                 setGetError('')
+                navigate('/')
             })
             .catch(error => {
                 setGetError(error.message);
