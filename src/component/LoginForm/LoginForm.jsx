@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import google from '../../assets/google.png';
 import facebook from '../../assets/facebook.png';
 import github from '../../assets/github.png';
 import twitter from '../../assets/twitter.png';
 import { Link } from 'react-router-dom';
 import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
+import { AuthContext } from '../../AuthProviders/AuthProviders';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
+    const {user, signUser}  = useContext(AuthContext);
+
     const [isShow , setIsShow] = useState(false);
 
     const [type , setIsType] = useState('password')
+
+    const [getError , setGetError] = useState('');
 
     const handleTypeText =()=>{
         setIsType('text');
@@ -26,6 +33,31 @@ const LoginForm = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(email, password);
+
+        signUser(email , password)
+        .then(res=>{
+            const loggedUser = res.user;
+            console.log(loggedUser);
+            toast.success('Welcome Back!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+
+            form.reset();
+            setGetError('')
+        })
+        .catch(error=>{
+            setGetError(error.message);
+
+        })
+
+
        
 
     }

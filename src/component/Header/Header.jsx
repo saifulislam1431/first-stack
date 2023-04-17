@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Bars3BottomRightIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { AuthContext } from '../../AuthProviders/AuthProviders';
 
 
 const Header = () => {
+    const {user} = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -18,7 +20,7 @@ const Header = () => {
                     </li>
 
                     <li className='ml-5 my-3 lg:my-0'>
-                        <NavLink to="/profile" className={({ isActive }) => (isActive ? 'active' : 'default')}>Products</NavLink>
+                        <NavLink to="/products" className={({ isActive }) => (isActive ? 'active' : 'default')}>Products</NavLink>
                     </li>
 
                     <li className='ml-5 my-3 lg:my-0'>

@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
+import { AuthContext } from '../../AuthProviders/AuthProviders';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
+    const {user , newUser}  = useContext(AuthContext);
     const [isShow , setIsShow] = useState(false);
+    const [ getError , setGetError] = useState('')
 
     const [type , setIsType] = useState('password')
 
@@ -23,6 +28,29 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
         console.log(name , email , password);
+
+        newUser(email , password)
+        .then(res=>{
+            const loggedUser = res.user;
+            console.log(loggedUser);
+            toast.success('Account created successfully!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                });
+
+            form.reset();
+            setGetError('')
+        })
+        .catch(error=>{
+            setGetError(error.message);
+
+        })
     }
     return (
         <main>
@@ -70,6 +98,7 @@ const Register = () => {
                                 <div className="form-control my-5">
                                     <button className="btn btn-info text-white ">Register</button>
                                 </div>
+                                <p className='text-red-500 font-medium'>{getError}</p>
                                 <p className='font-semibold text-slate-600 mb-3'>Already have an account? <Link to="/login" className='font-bold underline text-green-700 '>LogIn</Link></p>
 
                             </form>

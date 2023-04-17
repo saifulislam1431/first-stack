@@ -10,6 +10,8 @@ import Layout from './component/Layout/Layout';
 import Home from './component/Home/Home';
 import Register from './component/Register/Register';
 import LoginForm from './component/LoginForm/LoginForm';
+import AuthProviders from './AuthProviders/AuthProviders';
+import Products from './component/Products/Products';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
       {
         path:"/login",
         element: <LoginForm></LoginForm>
+      },
+      {
+        path: "/products",
+        element: <Products></Products>
       }
     ]
   },
@@ -34,6 +40,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+      <AuthProviders>
       <RouterProvider router={router} />
+      </AuthProviders>
   </React.StrictMode>,
 )
