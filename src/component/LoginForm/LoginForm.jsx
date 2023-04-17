@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const LoginForm = () => {
-    const { user, signUser, forgetPassword } = useContext(AuthContext);
+    const { user, signUser, forgetPassword, googleSignIn } = useContext(AuthContext);
 
     const [isShow, setIsShow] = useState(false);
 
@@ -64,6 +64,28 @@ const LoginForm = () => {
 
     }
     const handleGoogleLogIn = () => {
+        googleSignIn()
+            .then(res => {
+                const loggedUser = res.user;
+                console.log(loggedUser);
+                toast.success('Welcome Back!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+
+                form.reset();
+                setGetError('')
+            })
+            .catch(error => {
+                setGetError(error.message);
+
+            })
 
     }
     const handleGithubLogIn = () => {
@@ -91,7 +113,7 @@ const LoginForm = () => {
                 });
 
             })
-            .catch(error=>{
+            .catch(error => {
                 setGetError(error.message);
             })
 
@@ -135,6 +157,7 @@ const LoginForm = () => {
                                         <span onClick={passResetEmail} className="label-text-alt link link-hover mt-2 font-semibold text-red-400">Forgot password?</span>
                                     </label>
                                 </div>
+                                <p className='text-red-600 font-medium'>{getError}</p>
                                 <div className="form-control mt-4">
                                     <button className="btn btn-info text-white ">Login</button>
                                 </div>

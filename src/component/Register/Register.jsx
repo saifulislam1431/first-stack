@@ -1,23 +1,23 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { EyeIcon , EyeSlashIcon } from '@heroicons/react/24/solid';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { sendEmailVerification } from 'firebase/auth';
+import { sendEmailVerification, updateProfile } from 'firebase/auth';
 
 const Register = () => {
-    const {user , newUser}  = useContext(AuthContext);
-    const [isShow , setIsShow] = useState(false);
-    const [ getError , setGetError] = useState('')
+    const { user, newUser } = useContext(AuthContext);
+    const [isShow, setIsShow] = useState(false);
+    const [getError, setGetError] = useState('')
 
-    const [type , setIsType] = useState('password')
+    const [type, setIsType] = useState('password')
 
-    const handleTypeText =()=>{
+    const handleTypeText = () => {
         setIsType('text');
 
     }
-    const handleTypePass =()=>{
+    const handleTypePass = () => {
         setIsType('password');
 
     }
@@ -28,38 +28,15 @@ const Register = () => {
         const name = form.username.value;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(name , email , password);
+        console.log(name, email, password);
 
 
-        newUser(email , password)
-        .then(res=>{
-            const loggedUser = res.user;
-            verifyEmail(res.user)
-            console.log(loggedUser);
-            toast.success('Account created successfully!', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                });
-                
-
-            form.reset();
-            setGetError('')
-        })
-        .catch(error=>{
-            setGetError(error.message);
-
-        })
-
-        const verifyEmail = (user) =>{
-            sendEmailVerification(user)
-            .then(()=>{
-                toast.success('Email verification sent!', {
+        newUser(email, password)
+            .then(res => {
+                const loggedUser = res.user;
+                verifyEmail(res.user)
+                console.log(loggedUser);
+                toast.success('Account created successfully!', {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -68,10 +45,44 @@ const Register = () => {
                     draggable: true,
                     progress: undefined,
                     theme: "light",
-                    });
+                });
+
+                updateName(res.user , name);
+                form.reset();
+                setGetError('')
+            })
+            .catch(error => {
+                setGetError(error.message);
+
             })
 
+        const verifyEmail = (user) => {
+            sendEmailVerification(user)
+                .then(() => {
+                    toast.success('Email verification sent!', {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                })
+
         }
+    }
+    const updateName = (currenUser, name) => {
+        updateProfile(currenUser, {
+            displayName: name
+        })
+            .then(() => {
+                console.log("User name updated")
+            })
+            .catch((error) => {
+                setGetError(error.message);
+            })
     }
     return (
         <main>
@@ -90,7 +101,7 @@ const Register = () => {
                                     </label>
                                     <input type="text"
                                         name='username'
-                                        placeholder="username" className="input input-bordered" required/>
+                                        placeholder="username" className="input input-bordered" required />
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
@@ -98,22 +109,22 @@ const Register = () => {
                                     </label>
                                     <input type="email"
                                         name='email'
-                                        placeholder="email" className="input input-bordered" required/>
+                                        placeholder="email" className="input input-bordered" required />
                                 </div>
                                 <div className="form-control">
                                     <label className="label">
                                         <span className="label-text">Password</span>
                                     </label>
                                     <div className='flex items-center'>
-                                    <input type={type}
-                                    name='password'
-                                    placeholder="password" className="input input-bordered" required/>
-                                    <span onClick={()=> setIsShow(!isShow)} className='relative right-8'>
-                                        {
-                                            isShow ? <EyeSlashIcon className='h-6 w-6 text-sky-600' onClick={handleTypePass}/> : <EyeIcon className='h-6 w-6 text-sky-600' onClick={handleTypeText}/>
-                                        }
+                                        <input type={type}
+                                            name='password'
+                                            placeholder="password" className="input input-bordered" required />
+                                        <span onClick={() => setIsShow(!isShow)} className='relative right-8'>
+                                            {
+                                                isShow ? <EyeSlashIcon className='h-6 w-6 text-sky-600' onClick={handleTypePass} /> : <EyeIcon className='h-6 w-6 text-sky-600' onClick={handleTypeText} />
+                                            }
 
-                                    </span>
+                                        </span>
                                     </div>
                                 </div>
                                 <div className="form-control my-5">
